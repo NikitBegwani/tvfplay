@@ -1,0 +1,44 @@
+<div class="navbar navbar-inverse" ng-class="fixed ? \'\' : \'navbar-fixed-top\'" ng-controller=NavbarCtrl id=navbar>
+    <div class=container>
+        <div class=navbar-header>
+            <button class=navbar-toggle type=button ng-click="isCollapsed = !isCollapsed"><span class=sr-only>Toggle navigation</span> <span class=icon-bar></span> <span class=icon-bar></span> <span class=icon-bar></span></button>
+            <button class="btn navbar-search visible-xs" ng-click=search()><i class=ion-ios-search-strong></i></button>
+            <a ng-click=logo_click() class="navbar-brand pointer"><img src=static/client/assets/images/tvf-play-brand.png alt="TVFPlay Brand" width=115></a>
+        </div>
+        <div class=navbar-left>
+            <ul class="nav navbar-nav">
+                <li ng-show="is_mobile == false" class=dropdown><a class=dropdown-toggle data-toggle=dropdown href=javascript:;>Channels <i class="nc-icon-glyph arrows-1_minimal-down text-primary"></i></a>
+                    <ul class=dropdown-menu>
+                        <ul ng-repeat="item in menu_arrays">
+                            <li ng-repeat="category in item"><a analytics-on=click analytics-event=category ng-class="{active: isActive(category.category_id)}" analytics-category=Category href=/category/{{category.category_id}}>{{category.alias_name}} <i class="nc-icon-glyph arrows-1_minimal-right text-primary"></i></a></li>
+                        </ul>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div collapse=isCollapsed class="navbar-collapse collapse" id=navbar-main>
+            <div class=navbar-left>
+                <ul class="nav navbar-nav">
+                    <li ng-show="is_mobile == true" ng-repeat="item in menu" ng-class="{active: isActive(item.category_id)}"><a analytics-on=click analytics-event=category analytics-category=Category href=/category/{{item.category_id}}>{{item.alias_name}}</a></li>
+                </ul>
+            </div>
+            <div class=navbar-right>
+                <ul class="nav navbar-nav navbar-actions">
+                    <li><span><a class="btn btn-link navbar-btn hidden-xs" ng-click=search()><i class="ion-ios-search-strong x3"></i></a></span></li>
+                    <li ng-hide=isLoggedIn><span><a class="btn navbar-btn btn-default" ng-click=login()>Sign in</a></span></li>
+                    <li ng-hide=isLoggedIn><span><a class="btn navbar-btn btn-primary" ng-click=signup()>Join now</a></span></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-user navbar-right" ng-show=isLoggedIn>
+                    <li class="dropdown pointer">
+                        <a href=javascript:; class=dropdown-toggle data-toggle=dropdown ng-click=clickedProfile()>
+                            <div class="media-object img-circle"><img ng-src={{profile.picture_url}} alt="profile picture" height=40 width=40></div>{{profile.first_name}} <b class=caret></b></a>
+                        <ul class=dropdown-menu>
+                            <li><a ng-click=profileModal()>My Profile</a></li>
+                            <li><a ng-click=logout()>Sign out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

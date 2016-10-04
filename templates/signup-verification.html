@@ -1,0 +1,15 @@
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+
+<section style= 'min-height:350px;' class="products wow fadeInDown ng-scope">
+	<span class="loading-icon" ng-show='show_loader'></span>
+    <div  align='center'  style= 'padding-top:80px;'class="container help-block"><br><br><br><br>
+    	<div class="modal-header text-center">
+		   <h1>SignUp Verification</h1>
+		</div><!-- /.modal-header -->
+		<div ng-class='signup_status'>{{message}}</div>
+Please click<a class='pointer' ng-click="login()"> here </a>to login
+<br>
+	</div>
+</section> 
+
+<div ng-include="'static/client/components/footer/footer.html'"></div>

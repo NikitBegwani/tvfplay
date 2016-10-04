@@ -1,0 +1,233 @@
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+<!-- this file -->
+<div class="slider" ng-show ='series.show_banner_and_html == true'>
+    <data-owl-carousel-slider carousel-type="carousel" id= "owl-slider" class="owl-carousel hero-carousel" ng-class='extras_selected == 
+        false? "pointer" : ""' ng-click='extras_selected == false? watchEpisode() : ""'>
+        <div owl-carousel-item="" ng-repeat="slide in sliders">
+            <banner-show ng-click="latestEpisodeORSignup(series)" >
+                <!--===================================
+                    =            mobile markup            =
+                    ====================================-->
+                <div class="visible-xs">
+                    <div>
+                        <button 
+                            class="btn btn-link btn-play" 
+                            ng-if="extras_selected == false"
+                            ng-click='watchEpisode()'>
+                        <i class="nc-icon-glyph media-1_button-play x3"></i>
+                        </button>
+                    </div>
+                    <img class="img-responsive pull-right" ng-src="{{encodeImage(series.banner_image_url)}}" style="width: auto;">
+                </div>
+                <!--====  End of mobile markup  ====-->
+                <!--================================
+                    =            web markup            =
+                    =================================-->
+                <!-- 
+                    **TODO
+                    * Merge web and mobile markup
+                    -->
+                <div class="slider-content pull-left hidden-xs" >
+                    <div class="center-vertically reveal-animation" ng-show="checked">
+                        <div>
+                            <h1 class="slider-title">{{series.name}}</h1>
+                            <p class="slider-sub-title slider-description">{{series.genre}}</p>
+                            <div class="slider-description" ng-show="series.description">
+                                {{series.description}}
+                            </div>
+                            <div class="text-muted" style="position: absolute;">
+                                <span ng-show="extras_selected == false" >{{series.created_year}}<span class="divider">|</span></span>
+                                
+                                <episode >
+                                    <span ng-show="series.number_of_episodes> 0 && extras_selected == false">{{series.number_of_episodes}} {{series.number_of_episodes> 1 ? 'Episodes' : 'Episode'}}</span>
+
+                                    <span ng-show="extras_selected == true">{{series.number_of_extras}} {{series.extras_text}}</span>
+                                </episode>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.center-vertically -->
+                </div>
+                <!-- /.slider-content -->
+                <div class="slider-banner pull-right hidden-xs">
+
+                    <div>
+                        <button 
+                            class="btn btn-default btn-play"
+                            ng-if="extras_selected == false"
+                            ng-click='watchEpisode()'>
+                        <i class="nc-icon-glyph media-1_button-play x3 text-primary"></i>
+                        </button>
+                    </div>
+                    <img class="img-responsive pull-right img-slider" ng-src="{{encodeImage(series.banner_image_url)}}">
+                </div>
+            </banner-show>
+        </div>
+    </data-owl-carousel>
+</div>
+<!-- /.slider -->
+<div class="row season-panel" style="margin-left:0px;"> 
+    <div class="col-md-12 hidden-xs" ng-show ='series.show_banner_and_html == true' style="padding-left:48px;background-color: black;">
+        <div align="left">
+            <span ng-repeat="season in seasons" ng-class="season.season_id == season_id ? 'season-selected' : ''" style='margin-right:30px;padding-left:5px;padding-right:5px;'>
+                
+                <a ng-click="retrieve_series_or_season(season.season_id, seasons_sort_order[season.season_id] == undefined ? 'desc' : seasons_sort_order[season.season_id])"  class='normal text-muted pointer' >{{series.season_display_name}} {{season.season_number}}</a> 
+                
+                <a class="pointer normal">
+
+                    <img style='margin: 0 0 7px 5px;' ng-show='seasons_sort_order[season.season_id] == "desc"' ng-click="season.season_id == season_id ? retrieve_series_or_season(season.season_id, 'asc') : retrieve_series_or_season(season.season_id, seasons_sort_order[season.season_id] == undefined ? 'desc' : seasons_sort_order[season.season_id])"  ng-src="{{(season.season_id == season_id ? 'static/assets/images/down1.png' : 'static/assets/images/down2.png')}}">
+                    
+                    <img style='margin: 0 0 7px 5px;' ng-show='seasons_sort_order[season.season_id] == "asc"' ng-click="season.season_id == season_id? retrieve_series_or_season(season.season_id, 'desc') : retrieve_series_or_season(season.season_id, seasons_sort_order[season.season_id] == undefined ? 'desc' : seasons_sort_order[season.season_id])"  ng-src="{{(season.season_id == season_id ? 'static/assets/images/up2.png' : 'static/assets/images/up1.png')}}" />
+                
+                </a>
+            </span>
+
+            <span>
+                <a ng-if='series.extras == 1' class='normal pointer text-muted' ng-class="extras_selected ==true ? 'season-selected' : ''" ng-click="extras_series()" style="padding-right:10px;">Extras</a>
+            </span>
+        </div>
+
+    </div>
+    <div ng-if="extras_selected == false && series.show_banner_and_html == true" class="content-heading-social nullify-padding hidden-sm hidden-xs col-md-11 extras-sticky">
+        <div class="row">
+            {{season}}
+            <div class="col-md-3 col-md-offset-9" style="position:absolute;bottom:-5px;right:0%;">
+                <span style="float:left;padding:10px 10px 10px 0;">Share this show </span>
+                <button class="btn btn-social btn-twitter twitter-color" 
+                    ng-click='share_google_analytics("twitter", season_name, "SEASON_SHARE", season_id)' 
+                    socialshare socialshare-provider="twitter"
+                    socialshare-text={{season.name}} 
+                    socialshare-url="{{shorten_url_domain_name+series.shorten_token}}">
+                <i class="nc-icon-glyph socials-1_logo-twitter" style="color: #fff;font-size:22px;"></i>
+                </button>
+                <button style='margin-right:10px;' class="btn btn-social btn-facebook fb-color" 
+                    ng-click='share_google_analytics("facebook", season_name, "SEASON_SHARE", season_id)' 
+                    socialshare socialshare-provider="facebook"
+                    socialshare-text={{season.name}} 
+                    socialshare-url="{{shorten_url_domain_name+series.shorten_token}}">
+                <i class="nc-icon-glyph socials-1_logo-fb-simple" style="color: #fff;font-size:22px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="main" share-hide-click style="margin-top: 80px"> -->
+<div class="main series-page" share-hide-click>
+    <div class="container" style="padding-left:0px !important;">
+        <div class="row">
+
+            <!--==========================================
+            =            Section left content            =
+            ===========================================-->
+    
+                <div class="col-md-4" ng-class="(series.show_banner_and_html == false) ? 'visible-xs visible-md visible-lg visible-sm visible-xl-lg nullify-padding' : 'visible-xs'">
+
+
+                    <div ng-show="series.visibility == 1 || series.extras == 1">
+                        <div class="btn-group" dropdown>
+                            
+                            <button type="button" class="btn btn-default togglebtn" dropdown-toggle ng-disabled="disabled">
+                                {{extras_selected ? 'Extras' : series.season_display_name}} {{series.season_number}}
+                                <i class="ion-chevron-down text-primary"></i>
+                            </button> <!-- /.btn -->
+ 
+                            <ul class="dropdown-menu season-menu" role="menu">
+                                <li ng-repeat="season in seasons">
+                                    <a class='pointer' ng-click="retrieveSeries(category_id+ '/' + seriesId + '/' + season.season_id + '/1'+ '/'+episode_per_page)">{{series.season_display_name}} <span class="text-muted">&mdash;</span> {{season.season_number}}</a>
+                                </li>
+                                <li ng-show='series.extras==1'>
+                                    <a class='pointer' ng-click="extras_series()">Extras</a>
+                                </li>
+                            </ul><!-- /.dropdown-menu -->
+                        </div><!-- /.btn-group -->
+                    </div>
+                    
+                </div> <!-- /.col-md-4 -->
+
+            <!--====  End of Section left content  ====-->
+
+
+
+            <!--==========================================
+            =            Section list content            =
+            ===========================================-->
+            
+            <div class="col-md-11" ng-class="(series.show_banner_and_html == false) ? 'add_padding' : 'nullify-padding' ">
+                
+                <ul class="list-unstyled list-episodes" ng-init="submitted = false">
+
+                    <li ng-repeat="episode in episodes" ng-init="duration = getTimeInfo(episode.video_duration, episode.watched_duration)">
+
+                        <div class="row">
+
+                            <div class="col-md-3 col-xs-6">
+                                <a ng-href="/episode/{{series.category_id}}/{{series.series_id}}/{{episode.season_id}}/{{episode.episode_id}}" class="play-thumbnail">
+
+                                    <span class="play-overlay" ng-style='mouseover_id == episode.episode_id ? {"opacity" : 1} : "" '>
+                                        <i class="nc-icon-glyph media-1_button-play text-primary"></i>
+                                    </span>
+
+                                    <p ng-if='watchedInfo(episode.video_duration, episode.watched_duration) == true' class="badge badge-default" style="position: absolute;bottom: -11px;right: 0;z-index: 3;color: #ffffff;font-size: 10px;opacity: 0.8;">
+                                        WATCHED
+                                    </p>
+
+                                    <img id="{{episode.episode_id}}" class="img-responsive" ng-src="{{encodeImage(episode.highlight_image_url)}}" alt="{{episode.name}}"  imageonload>
+                                    <span class="loading-icon" id="loader_{{episode.episode_id}}"></span>
+                                </a>
+
+                                <span class="visible-xs hidden">
+                                    <progressbar ng-if='episode.third_party=="0" && isLoggedIn == true' max="max" value="duration.watched_duration"><span style="color:white; white-space:nowrap;"></span></progressbar>
+                                    <progressbar><span style="color:white; white-space:nowrap;"></span></progressbar>
+                                </span>
+
+                                <p class="visible-xs">
+                                    <span class="padding-box" ><i class="nc-icon-glyph ui-2_time-countdown"></i>{{duration.video_duration}}</span>
+
+                                    <span class="padding-box" ><i class="nc-icon-glyph ui-2_chat-content"></i> {{episode.comments}}</span>
+                                    
+                                   <span class="padding-box" > <i  class="nc-icon-glyph emoticons_like"></i> {{episode.likes}}</span>
+                                </p>
+
+                            </div><!-- /.col-md-3 -->
+
+                            <div class="col-md-6 col-xs-6" ng-init = 'castings = parseJson(episode.casting_fields)'>
+                                <a ng-mouseenter="mouseover_id = episode.episode_id" ng-mouseleave="mouseover_id=0" style='color: #ffc105;' class='header-link list-episodes-title title' ng-href="/episode/{{series.category_id}}/{{series.series_id}}/{{episode.season_id}}/{{episode.episode_id}}">{{episode.name}}</a>
+                                
+                                <p class='description'>{{episode.description}}</p>
+
+                                <div class='hidden-xs' style='opacity:0.7;' ng-repeat='cast in castings'>
+                                    <span>{{cast['key']}}:</span>
+                                    <span>{{cast['value']}}</span>
+                                </div>
+
+                            </div><!-- /.col-md-7 -->
+
+                            <div class="col-md-2 hidden-xs nullify-padding">
+                                <div class="padding-box"><i class="nc-icon-glyph ui-2_time-countdown"></i> {{duration.video_duration}} <span class=""></span></div>
+                                
+                                <div class="padding-box"><i class="nc-icon-glyph ui-2_chat-content"></i> {{episode.comments}} Comments</div>
+
+                                <div class="padding-box"><i class="nc-icon-glyph emoticons_like"></i> {{episode.likes}} Likes</div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <hr class="hr-default">
+
+                        </div><!-- /.row -->
+
+                    </li>
+                    <button ng-show='loadmore' ng-click="loadMore(season_id)" ng-disabled="submitted" class="btn btn-custom center-block">Load More <i class="ion-plus"></i></button>
+
+                </ul><!-- /.list-unstyled -->
+
+            </div><!-- /.col-md-8 -->
+
+            <!--====  End of Section list content  ====-->
+    
+        </div><!-- /.row -->
+    </div><!-- /.container -->
+</div><!-- /.main -->
+
+<div ng-include="'static/client/components/footer/footer.html'"></div>

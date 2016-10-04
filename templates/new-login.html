@@ -1,0 +1,54 @@
+     <a href ng-click="cancel()" class="revised-modal-close-btn">
+        <img src="static/assets/images/close.png">
+    </a>
+     
+    <div class="modal-header" >
+        <h3 class="modal-title" ng-show="spstatus != 'success'">Sign in to proceed</h3>
+    </div><!-- /.modal-header -->
+
+    <div class="alert" ng-show="message != undefined" ng-class="spstatus == 'success' ? 'alert-success' : 'alert-danger'" role="alert">
+        {{message}}
+    </div>
+ 
+    <div  login-page class="modal-body row">
+        <div ng-show="spstatus != 'success'">
+            <form name="loginForm"  class='tvf-loginform auth-form' novalidate target="tvf-iframe">            
+                <input type='hidden' name='csrfmiddlewaretoken' value="{{csrf_token}}" />
+                <input type='hidden' name='remember_me' value="{{remember_me}}" />
+                <input type='hidden' name='type' value="THEVIRALFEVER" />
+                <input type='hidden' name='referrer' value="{{referrer_url}}" />
+                <input type='hidden' name='source' value="general" />
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                  <label for="email">Email Address</label>
+                  <input type="email" class="form-control" style="border:solid 1px #d8d8d8;box-shadow: inherit;color: #8c8c8c" name="email" required placeholder="e.g. xxx@xxx.xxx" ng-model="email" />
+                    <div class="disabled_label hidden-xs">
+                        <a ng-click="introModal()" class="pointer">Edit</a>
+                    </div>
+                    <p class="help-block" ng-if="loginForm.email.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                    <p class="help-block" ng-if="loginForm.email.$error.email"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                </div>
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <label for="password">Your Password</label>
+                    <input type="password" class="form-control" name="password" required minlength='6' placeholder="your TVFPLAY account password" ng-model="login.password" autofocus="true"/>
+                    <p class="help-block" ng-if="loginForm.password.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyPassword}}</p>
+                    <p class="help-block" ng-if="loginForm.password.$error.minlength"><i class="ion-alert-circled text-danger"></i> {{validPassword}}</p>
+                </div><!-- /.form-group -->
+                
+                <button type="submit" class="get_started" ng-click="tvfLogin()">
+                    Sign In
+                </button>
+            </form> 
+
+            <span ng-show='fgpass_loader' style= 'position: relative;margin: 5px;' class="loading-icon text-center"></span>
+            <div align="center" style='padding-bottom:35px;' >
+                <a style="color:#222425
+;text-decoration: none;" ng-click="submitted != true ? forgotPassword() : 'javascript:;'" class="pointer">Not able to sign in?</a>
+            </div>
+
+        </div>
+
+            <!-- </div> -->
+    </div><!-- /.modal-body -->
+

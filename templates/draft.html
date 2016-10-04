@@ -1,0 +1,32 @@
+<div ng-include="\'static/client/components/navbar/navbar.html\'"></div>
+<br>
+<br>
+<div class="modal-header text-center">
+    <h1>Reset Password</h1>
+</div>
+<div class=modal-body style=min-height:325px;><span class=loading-icon ng-show=show_loader></span>
+    <p ng-class=rppoststatus class="help-block text-center">{{rpmessage}}</p>
+    <div class=text-center ng-show=show_login>Please click<a class=pointer ng-click=login()>here</a>to login</div>
+    <form name=passwordForm ng-show="rpstatus==\'success\'" id=resetPasswordForm novalidate="">
+        <div class=row>
+            <div class="form-group col-md-6" show-errors="{showSuccess: true}">
+                <input type=password class=form-control name=newPassword required="" minlength=6 placeholder="New Password" ng-model=user.new_password>
+                <p class=help-block ng-if=passwordForm.newPassword.$error.required><i class="ion-alert-circled text-danger"></i> {{emptyPassword}}</p>
+                <p class=help-block ng-if=passwordForm.newPassword.$error.minlength><i class="ion-alert-circled text-danger"></i> {{validPassword}}</p>
+            </div>
+            <div class="form-group col-md-6" show-errors="{showSuccess: true}">
+                <input type=password class=form-control name=confirmPassword required="" placeholder="Confirm Password" ng-model=user.confirm_password>
+                <p class=help-block ng-if=passwordForm.confirmPassword.$error.required><i class="ion-alert-circled text-danger"></i> {{emptyConfirmPassword}}</p>
+            </div>
+        </div>
+        <div align=center>
+            <button type=submit class="btn btn-default outline rounded" ng-click=resetPassword()>Reset Password <i class=ion-arrow-right-c></i></button>
+        </div>
+        <div class=clearfix></div>
+    </form>
+    <div ng-show="rpstatus==\'failure\'">
+        <div ng-class=rpstatus style="text-align: center;">{{message}}</div>
+        <div class=text-center>Please click<a class=pointer ng-click=login()>here</a>to login</div>
+    </div>
+</div>
+<div ng-include="\'static/client/components/footer/footer.html\'"></div>

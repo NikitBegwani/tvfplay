@@ -1,0 +1,189 @@
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+
+<div class="hero-video" ng-mousemove="mousemovePlayer()">
+	<div ng-include="partialSrcHtml" ></div>
+</div>
+<!-- /.container -->
+<!-- /.hero-unit .video -->
+<!-- <div class="main" id="main" share-hide-click style="margin-top: 10px"> -->
+<div class="main episode-page" id="main" share-hide-click>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-7 col-md-push-5">
+				<div class="content-heading">
+					<h3 class="content-title">
+						{{episode.name}} 
+						<div class="clearfix"></div>
+						<a href="javascript:;" ng-if ='episode.e_type == "music"' ng-click='download_music()' class="btn btn-primary outline rounded download-music" style='margin-top:10px;'>Download Mp3</a>
+						<a ng-hide='true' href="javascript:;" class="downloadable-music"></a>
+					</h3>
+					<!-- /.episode-heading -->
+					<p>{{episode.description}}</p>
+					<p ng-init="duration1=getTimeInfo(episode.video_duration, episode.watched_duration)">
+						{{getTimeInfo(episode.video_duration, episode.watched_duration).video_duration}} <span class="text-muted"></span>
+						<air-date ng-show='show_air_date()==1'>&mdash; {{episode.uploaded_at}} </air-date>
+						<span class="pull-right"></span>
+					</p>
+					<!-- <span ng-text-truncate="episode.description" ng-tt-chars-threshold="150"></span> -->
+					<div class="content-heading-social" >
+						<!-- /.rate-wrapper -->
+						<button ng-class="like == 1 ? 'btn-liked' : 'btn-unliked'" class="btn btn-social"
+							ng-click="likeEpisode()">
+						<i class="nc-icon-glyph emoticons_like"></i>
+						</button>
+						<button class="btn btn-social btn-facebook" 
+							ng-click='share_google_analytics("facebook", episode.name, "EPISODE_SHARE", episode.episode_id)' 
+							socialshare socialshare-provider="facebook"
+							socialshare-text={{episode.name}} 
+							socialshare-url="{{shorten_url_domain_name+episode.shorten_token}}">
+						<i class="nc-icon-glyph socials-1_logo-fb-simple"></i>
+						</button>
+						<button class="btn btn-social btn-twitter"
+							ng-click='share_google_analytics("twitter", episode.name, "EPISODE_SHARE", episode.episode_id)' 
+							socialshare socialshare-provider="twitter"
+							socialshare-text={{episode.name}} 
+							socialshare-url="{{shorten_url_domain_name+episode.shorten_token}}">
+						<i class="nc-icon-glyph socials-1_logo-twitter"></i>
+						</button>
+						
+					</div>
+					<!-- /.content-heading-social -->
+				</div>
+			
+				<!-- /if inbox -->
+				<!-- <div class="clearfix"></div> -->
+				<div class="fb-comment-wrappper" ng-if='!(episode.c_type == "inbox" && episode.is_extras == true)'>
+					<div class="fb-comments" data-href='{{episode.mapping_url != "" ? episode.mapping_url : fbcomments_url}}' colorscheme="light" data-numposts="20" width="100%" data-width="100%"></div>
+				</div>
+			</div>
+			<!-- /.col-md-8 .col-md-push-4--> 
+			<!--=============================
+				=            Sidebar            =
+				==============================-->
+			<div class="col-md-4 col-md-pull-7 nullify-padding">
+				<span ng-if='(episode.c_type=="inbox" && episode.is_extras == true)' style="padding-top:10px;">Support Email:support@tvfplay.com</span>
+				<div ng-if="episode.c_type != 'inbox' || episode.is_extras != true">
+					<h1 class="page-heading" style='letter-spacing: 0px !important; text-transform: none;'>{{showSeasons == false? episode.name : category.name}}</h1>
+					<div ng-repeat='cast in casting_fields'>
+						<span><b style='font-size:20px;'>{{cast['key']}}: </b></span>
+						<span>{{cast['value']}}</span>
+					</div>
+					<hr class="hr-default hidden-xs">
+					<p class="episode-meta">
+						<tag ng-if="category.is_trailer !=1">
+							<span class="text-primary">{{showSeasons == false? episode.genre : category.genre}}</span>
+							<br class="hidden-xs">
+							<type ng-if='episode.c_type == "category" && episode.e_type != "music"'>
+							<episode  ng-init = "episode_text = category.number_of_episodes == 1 ? ' Episode' : ' Episodes'" ng-if='category.number_of_episodes>0'>
+								<span class='text-primary'>{{category.number_of_episodes}}</span>
+								<span>{{episode_text}}</span>
+							</episode>
+							<extras ng-if='category.number_of_extras>0'>
+								<span class="text-primary">{{category.number_of_extras}}</span>
+								<span> {{category.extras_text == "" ? "Extras" :  category.extras_text}}</span>
+							</extras>
+							<type>
+						</tag>
+						<type ng-if='episode.c_type == "inbox" && episode.is_extras == true'>
+						<span class='text-primary'>{{episode.rental_text}}</span>				            	
+						<type>
+					</p>
+					<!-- <span ng-text-truncate="showSeasons == false? episode.description : category.description" ng-tt-chars-threshold="100"></span> -->
+					<p>{{showSeasons == false? episode.description : category.description}}</p>
+					<hr class="hr-default">
+				</div>
+				<div class="row" ng-hide="category.visibility == 0 || showSeasons == false">
+					<div class="col-md-6">
+						<div class="btn-group" dropdown>
+							<button id="single-button" type="button" class="btn btn-default rounded outline togglebtn" dropdown-toggle ng-disabled="disabled">
+							{{extras_selected ? 'Extras' : category.season_display_name}} {{category.season_number}}
+							<i class="ion-chevron-down text-primary"></i>
+							</button>
+							<ul class="dropdown-menu season-menu" role="menu" aria-labelledby="single-button">
+								<li ng-repeat="season in seasons">
+									<a ng-click="getEpisodes(season.season_id, false)">{{category.season_display_name}} <span class="text-muted">&mdash;</span> {{season.season_number}}</a>
+								</li>
+								<li ng-show='category.extras==1'>
+									<a ng-click="extras_series()">Extras</a>
+								</li>
+							</ul>
+						</div>
+						<!-- /.btn-group -->
+					</div>
+					<!-- /col-md-6 -->
+				</div>
+				<!-- /.row -->
+				<!--=================================
+					=            series list            =
+					==================================-->
+				<ul class="list-unstyled list-episodes" ng-init="submitted = false">
+					<li ng-repeat="video in episodes" ng-init="duration = getTimeInfo(video.video_duration, video.watched_duration)">
+						<div class="row">
+							<div class="col-md-6 col-xs-6">
+								<a href='/#/episode/{{category.category_id}}/{{series_id}}/{{video.season_id}}/{{video.episode_id}}' class="play-thumbnail">
+								<span class="play-overlay"><i class="ion-ios-play text-primary"></i></span>
+
+								<p ng-if='watchedInfo(video.video_duration, video.watched_duration) == true' class="badge badge-default" style="position: absolute;bottom: -11px;right: 0;z-index: 3;color: #ffffff;font-size: 10px;opacity: 0.8;">
+                                        WATCHED
+                                    </p>
+
+								<img class="img-responsive" ng-src="{{encodeImage(video.highlight_image_url)}}" alt="{{video.name}}">
+								</a>
+							
+							</div>
+							<!-- /.col-md-6 .col-xs-6 -->
+							<div class="col-md-6 col-xs-6">
+								<p class="list-episodes-title">
+									{{video.name}}
+								</p>
+								
+
+								<div>
+									<p class="visible-xs">
+	                                    <span class="padding-box" ><i class="nc-icon-glyph ui-2_time-countdown"></i>{{duration.video_duration}}</span>
+
+	                                    <span class="padding-box" ><i class="nc-icon-glyph ui-2_chat-content"></i> {{video.comments}}</span>
+	                                    
+	                                   <span class="padding-box" > <i  class="nc-icon-glyph emoticons_like"></i> {{video.likes}}</span>
+	                                </p>
+                                </div>
+
+                                <span ng-if='video.third_party=="0" && isLoggedIn == true'>
+									<progressbar max="max" value="duration.watched_duration"><span style="color:white; white-space:nowrap;"></span></progressbar>
+								</span>
+
+								<p class="hidden-xs">
+									<span>
+										{{duration.video_duration}} <span class="text-muted"></span>
+										<air-date ng-show='show_air_date()==1'> &mdash;{{video.uploaded_at}}</air-date>
+										<span class="text-muted"></span>	
+									</span>
+									<br>
+									<likes>
+									<span><i class="nc-icon-glyph emoticons_like"></i> {{video.likes}}</span></likes>
+									<br>
+									<comment>
+									<span><i class="nc-icon-glyph ui-2_chat-content"></i> {{video.comments}}</span></comment>
+								</p>
+							</div>
+							<!-- /.col-md-6 .col-xs-6 -->
+							<div class="clearfix"></div>
+							<hr class="hr-default">
+						</div>
+						<!-- /.row -->
+					</li>
+					<!-- /.row -->
+					<button ng-show="loadmore" ng-click="loadMore()" ng-disabled="submitted" class="btn btn-custom center-block">Load More <i class="ion-plus"></i></button>
+				</ul>
+				<!-- /.list-unstyled --> 
+				<!--====  End of series list  ====-->
+			</div>
+			<!-- /.col-md-4 .col-md-pull-8 -->
+			<!--====  End of Sidebar  ====-->
+		</div>
+		<!-- /.container main -->
+	</div>
+	<!-- /.row -->
+</div>
+<!-- /.main -->
+<div ng-include="'static/client/components/footer/footer.html'"></div>

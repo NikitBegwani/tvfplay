@@ -1,0 +1,93 @@
+<!--
+tvfLogin()
+signuppage()
+forgetpasswordModal()
+googleLogin()
+facebooklogin()
+-->
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+<!-- <div style="background-color: orange"> -->
+    <div class='authentication-center'>
+
+    <div class="modal-header">
+        <h3 class="modal-title">Sign In to your account</h3>
+    </div><!-- /.modal-header -->
+    
+    <div class="modal-body row tvf-login-form">
+        <form name="loginForm" class= 'tvf-loginform auth-form' novalidate target="tvf-iframe">
+
+            <!-- <div  style="background-color: blue"> -->
+               <input type='hidden' name='csrfmiddlewaretoken' value="{{csrf_token}}" />
+               <input type='hidden' name='remember_me' value="{{remember_me}}" />
+               <input type='hidden' name='type' value="THEVIRALFEVER" />
+               <input type='hidden' name='referrer' value="{{root_url}}" />
+               <input type='hidden' name='source' value="general" />
+               
+                <div class='text-center' ng-class="spstatus">{{message}}</div>
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <input type="email" class="form-control" name="email" required  placeholder="Email" ng-model="login.email" />
+                    <p class="help-block" ng-if="loginForm.email.$error.required"><i class="ion-alert-circled text-danger"></i>{{emptyEmail}}</p>
+                    <p class="help-block" ng-if="loginForm.email.$error.email"><i class="ion-alert-circled text-danger"></i>{{emptyEmail}}</p>
+                </div><!-- /.form-group -->
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <input type="password" class="form-control" name="password" required placeholder="Password" ng-model="login.password" />
+                    <p class="help-block" ng-if="loginForm.password.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyPassword}}</p>
+                </div><!-- /.form-group -->
+                
+                <div class="row">
+                
+                    <div class="col-md-6">
+                        
+                        <!-- <p><i class="ion-android-checkbox-outline text-primary"></i> Remember me on this devices</p> -->
+                        <!-- <i class="ion-android-checkbox-outline"></i> -->
+                        
+                        <button type="button" class="btn btn-checkbox" ng-model="remember_me" btn-checkbox btn-checkbox-true="true" btn-checkbox-false="false">
+                            Remember me on this device <span class="text-primary"></span>
+                        </button>
+
+                        <a ui-sref="login.forgot" class="btn-link text-muted visible-xs" ng-click="forgotPasswordModal()">Forgot Password?</a>
+                    </div><!-- /.col-md-6 -->
+
+                    <div class="col-md-6 text-right hidden-xs" ng-click="forgotPasswordModal()">
+                        <a  class="btn-link text-muted" >Forgot Password?</a>
+                    </div><!-- /.col-md-6 -->
+
+                </div><!-- /.row -->
+
+                <button type="submit" class="btn navbar-btn btn-primary" ng-click='tvfLogin()'>
+                    Sign In
+                    <i class="ion-arrow-right-c"></i>
+                </button>
+        </form> 
+                <hr>
+                
+                <p>Don’t have a TVFPlay account?</p>
+
+                <button type="submit" ng-click="signuppage()" class="btn navbar-btn btn-primary">
+                    Sign Up
+                    <i class="ion-arrow-right-c"></i>
+                </button>
+
+                <hr>
+
+                <h3>Sign in with:</h3>
+                
+                <!--google-signin-->
+                    <button type="button" class="btn google-btn" ng-click='googleLogin()'>
+                        Google
+                    </button>
+                <!--/google-signin-->
+
+                <!--facebook-signin-->
+                    <button type="button" class="btn facebook-btn" ng-click='facebookLogin()'>
+                        Facebook
+                    </button>
+                <!--/facebook-signin-->
+                
+            <!-- </div> --> <!-- /.container -->
+        
+    </div> <!-- /.modal-body -->
+<!-- </div> -->
+</div>
+<div ng-include="'static/client/components/footer/footer.html'"></div>

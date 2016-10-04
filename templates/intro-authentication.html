@@ -1,0 +1,49 @@
+<!-- <div style="background-color: orange"> -->
+ <!--
+cancel()
+facebookLogin()
+googleLogin()
+ -->
+    <a href ng-click="cancel()" class="revised-modal-close-btn">
+         <img src="static/assets/images/close.png">
+    </a>
+    <div class="modal-header">
+        <h3 class="modal-title" >Hello there!</h3>
+        <h3 class="modal-title" >Welcome to TVFPLAY</h3>
+    </div><!-- /.modal-header -->
+    
+    <div intro-login class="modal-body row">
+        
+         <!--p class='help-block success' ng-show='spstatus=="success"'> Hi {{register.first_name}}, </p>-->
+        
+        <div class="alert" ng-show="message != undefined" ng-class="spstatus == 'success' ? 'alert-success' : 'alert-danger'" role="alert">
+            {{message}}
+        </div>
+
+        <div>
+            <form name="introForm" class="auth-form" novalidate target="tvf-iframe">            
+                   
+                <div class="form-group">
+                    <img class='social-connect pointer' src="static/assets/images/fb-connect.png" ng-click='facebookLogin()'>
+                    <img class='social-connect pointer' src="static/assets/images/google-connect.png" ng-click='googleLogin()'>
+                </div>
+
+                <p class="or-legend"><span><img  height='45px' src="static/assets/images/or.png"></span></p>
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <label for="email">Enter your email address</label>
+                    <input type="email" class="form-control" name="email" required placeholder="e.g. xxx@xxx.xxx" ng-model="email" />
+                    <p class="help-block" ng-if="introForm.email.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                    <p class="help-block" ng-if="introForm.email.$error.email"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                </div>
+                
+                <div class="clearfix"></div>
+                <button type="submit" class="get_started" ng-click="check_availabilty_email()">
+                    Continue with email
+                </button>
+            </form> 
+        </div>
+
+            <!-- </div> -->
+    </div><!-- /.modal-body -->
+<!-- </div> -->

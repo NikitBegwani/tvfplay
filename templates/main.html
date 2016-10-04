@@ -1,0 +1,161 @@
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+<!-- this file -->
+    <div class="slider">
+        <data-owl-carousel-slider carousel-type="carousel" id= "owl-slider" class="owl-carousel hero-carousel pointer">
+            <div owl-carousel-item="" ng-repeat="slide in sliders">
+                <banner-show ng-show='slide.banner_type == "season"' ng-click="latestEpisodeORSignup(slide)">
+                    <!--===================================
+                        =            mobile markup            =
+                        ====================================-->
+                    <div class="visible-xs">
+                        <div ng-if = "slide.banner_type=='season'">
+                            <button 
+                                class="btn btn-link btn-play" 
+                                ng-click='watchEpisode(slide)'>
+                            <i class="nc-icon-glyph media-1_button-play x3"></i>
+                            </button>
+                        </div>
+                        <img class="img-responsive pull-right" ng-src="{{encodeImage(slide.aspect_xl_large_url)}}" style="width: auto;">
+                    </div>
+                    <!--====  End of mobile markup  ====-->
+                    <!--================================
+                        =            web markup            =
+                        =================================-->
+                    <!-- 
+                        **TODO
+                        * Merge web and mobile markup
+                        -->
+                    <div class="slider-content pull-left hidden-xs">
+                        <div class="center-vertically">
+                            <div>
+                                <h1 class="slider-title">{{slide.name}}</h1>
+                                <p class="slider-sub-title" ng-show="slide.genre">{{slide.genre}}</p>
+                                <div class="slider-description" ng-show="slide.description">
+                                    {{slide.description}}
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.center-vertically -->
+                    </div>
+                    <!-- /.slider-content -->
+                    <div class="slider-banner pull-right hidden-xs">
+                        <button style= 'position:absolute; top: 85%; right: 5%; z-index: 222222; font-family:AvenirMedium; padding: 9px;text-transform: uppercase; border-radius:2px; border:0px;' class="btn-primary outline rounded hidden-xs">
+                        <i class="nc-icon-glyph media-1_button-play"></i>Latest Video
+                        </button>
+                        <div ng-if = "slide.banner_type=='season'">
+                            <button 
+                                class="btn btn-default btn-play"
+                                ng-click='watchEpisode(slide)'>
+                            <i class="nc-icon-glyph media-1_button-play x3 text-primary"></i>
+                            </button>
+                        </div>
+                        <img class="img-responsive pull-right img-slider" ng-src="{{encodeImage(slide.aspect_xl_large_url)}}">
+                    </div>
+                    <!-- /.slider-banner -->
+                    <!--====  End of web markup  ====-->
+                    <!-- <a ng-show='slide.banner_type=season' ng-click="watchEpisode(slide)" class="hero-video-play"><i class="ion-ios-play" style='font-size:70px;'></i></a> -->
+                </banner-show>
+                <banner-show-temporary ng-show='slide.banner_type == "custom"' class='pointer' ng-click="navigate_to_custom_url(slide)">
+                    <div ng-show='slide.is_sign_up_banner != 1'>
+                        <img class="img-responsive" ng-src="{{encodeImage(slide.aspect_xl_large_url)}}" style="margin:auto;">
+                        <div class="carousel-caption hidden-xs">
+                            <div class="container">
+                                <div class="col-md-12">
+                                    <h1>{{slide.name}}</h1>
+                                    <p class="text-primary" ng-show="slide.genre">{{slide.genre}}</p>
+                                    <blockquote ng-show="slide.description">
+                                        {{slide.description}}
+                                    </blockquote>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="slide.is_sign_up_banner == 1">
+                        <div class="slider-content pull-left hidden-xs">
+                            <div class="center-vertically">
+                                <div>
+                                    <h1 class="slider-title">{{slide.name}}</h1>
+                                    <div class="slider-description" ng-show="slide.description">
+                                        {{slide.description}}
+                                    </div>
+
+                                    <button style= 'position:absolute;top: 85%;left: 15%;z-index: 222222;font-family:AvenirMedium;padding: 9px;text-transform: uppercase;border-radius:2px;border:0px;' class="btn-primary outline rounded hidden-xs">
+                            <i class="nc-icon-glyph media-1_button-play"></i>SIGN UP
+                            </button>
+
+                                </div>
+                            </div>
+                            <!-- /.center-vertically -->
+                        </div>
+                        <!-- /.slider-content -->
+                        <div class="slider-banner pull-right">
+                            <img class="img-responsive pull-right img-slider" ng-src="{{encodeImage(slide.aspect_xl_large_url)}}">
+                        </div>
+                    </div>
+                </banner-show-temporary>
+            </div>
+        </data-owl-carousel>
+    </div>
+<!-- /.slider -->
+<!--=========================================
+    =            Main Slider section            =
+    ==========================================-->
+    <div class="series-list" ng-repeat="series in categories">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="section-title pointer header-link" 
+                        ng-click="categoryPage((series.type == 'category' ||  series.type == 'inbox') 
+                                    ? series.category_id 
+                                    : series.group_id)">
+                        {{series.name}}
+                    </h3>
+                    <data-owl-carousel id= "{{(series.type == 'category' ||  series.type == 'inbox') 
+                                                ? 'owl-category-'+ series.category_id 
+                                                : 'owl-group-'+ series.group_id}}" 
+                                        class="owl-carousel cat-carousel" class="col-md-3 col-xs-6">
+                        <div owl-carousel-item="" 
+                             ng-repeat="x in seriesArray[(series.type == 'category' ||  series.type == 'inbox') 
+                                                        ? series.category_id 
+                                                        : 'group_' + series.group_id]" >
+
+                            <a ng-init = "random = generate_string()" 
+                                class="series-link-wrapper" 
+                                ng-href="{{generateSeriesRedirectURL(x,series)}}">
+
+                                <p ng-if='x.purchased == 0 && x.superscript_text != ""' 
+                                    class="badge badge-default" 
+                                    style="position: absolute; top: 0; right: 0; z-index: 1">
+                                    {{x.superscript_text}}
+                                </p>
+                                <img class ="img-responsive" ng-class="series.orientation == 'portrait' 
+                                                                        ? 'cat-carousel-image' : ''" 
+                                        ng-src="{{series.orientation == 'portrait' ? x.a4_series_image_url : x.thumbnail_image_url}}" 
+                                        alt="{{x.name}}" id="{{random}}" imageonload>
+                                <span class="series-link-overlay">
+                                <i class="nc-icon-glyph media-1_button-play text-primary"></i>
+                                </span>
+                                <!--Safari, Firefox fixed in firefox /-->
+                                <span ng-show ="{{(series.orientation == 'portrait' ? x.a4_series_image_url : x.thumbnail_image_url) != undefined}}" class="loading-icon" id="loader_{{random}}"></span>    
+                            </a>
+                            <p ng-if = 'series.type=="inbox"' class="series-item-title">{{x.rental_text}}</p>
+                            <h4 class="text-left hidden">
+                                <span class="text-truncate visible-xs">{{x.name}}</span> 
+                                <span class="hidden-xs">{{x.name}}<br></span>
+                                <span  ng-show='show_air_date()==1' class="text-muted">{{x.created_at}}</span>
+                            </h4>
+                        </div>
+                    </data-owl-carousel>
+                </div>
+                <!-- /.col-md-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.container -->
+        <hr class="hr-default">
+    </div>
+<!-- /.series-list -->
+</div><!-- /.main -->
+<!--====  End of Main Slider section  ====-->
+<div ng-include="'static/client/components/footer/footer.html'"></div>

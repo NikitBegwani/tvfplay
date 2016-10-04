@@ -1,0 +1,80 @@
+<div ng-include="'static/client/components/navbar/navbar.html'"></div>
+
+<div class="authentication-center">   
+<!--
+    <iframe class='hidden' src="http://cztrk.com/p.ashx?o=1706&e=490&t=uniqueid" height="1" width="1" frameborder="0"></iframe>
+    <img src="https://traffic.outbrain.com/network/trackpxl?advid=55932&action=view" height="1" width="1" border="0"/> 
+googleLogin()
+facebookLogin()
+tvfRegistration()
+-->
+    <div class="modal-header" ng-hide='spstatus=="success"'>
+        <h3 class="modal-title">Sign in with:</h3>
+        <div style='margin-top:5px;'>
+            <button type="button" class="btn google-btn" ng-click='googleLogin()'>
+                Google
+            </button>
+
+            <button type="button" class="btn facebook-btn" ng-click='facebookLogin()'>
+                Facebook
+            </button>
+        </div>
+        
+    </div> 
+
+    <div class="modal-header" style="padding-bottom: 0px !important;">
+        <h3 class="modal-title" ng-hide='spstatus=="success"' >Create an account</h3>
+    </div><!-- /.modal-header -->
+ 
+    <div class="modal-body row">
+         <!--p class='help-block success' ng-show='spstatus=="success"'> Hi {{register.first_name}}, </p>-->
+        <p class='help-block' ng-class="spstatus"> {{registermessage}} </p>
+        <div ng-hide='spstatus=="success"'>
+            <form name="signupForm"  class='tvf-signupform auth-form' novalidate target="tvf-iframe">            
+                   <input type='hidden' name='csrfmiddlewaretoken' value="{{csrf_token}}" />
+                   <input type='hidden' name='type' value="THEVIRALFEVER" />
+                   <input type='hidden' name='referrer' value="{{referrer_url}}" />
+                   <input type='hidden' name='source' value="general" />
+                   <input type='hidden' name='all_data' value="" />
+                   <input type='hidden' name="g-recaptcha-response" value="{{captcha_value}}" />
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <input type="email" class="form-control" name="email" required placeholder="Email" ng-model="register.email" />
+                    <p class="help-block" ng-if="signupForm.email.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                    <p class="help-block" ng-if="signupForm.email.$error.email"><i class="ion-alert-circled text-danger"></i> {{emptyEmail}}</p>
+                </div><!-- /.form-group -->
+     
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <input type="password" class="form-control" name="password" required minlength='6' placeholder="Password" ng-model="register.password" />
+                    <p class="help-block" ng-if="signupForm.password.$error.required"><i class="ion-alert-circled text-danger"></i> {{emptyPassword}}</p>
+                    <p class="help-block" ng-if="signupForm.password.$error.minlength"><i class="ion-alert-circled text-danger"></i> {{validPassword}}</p>
+                </div><!-- /.form-group -->
+
+                <div class="form-group" show-errors='{showSuccess: true}'>
+                    <input type="password" class="form-control" name="confirmPassword" required placeholder="Confirm Password" ng-model="register.confirm_password" />  
+                    <p ng-if='signupForm.confirmPassword.$error.required' class="help-block" ><i class="ion-alert-circled text-danger"></i> {{emptyConfirmPassword}}</p>
+                </div><!-- /.form-group -->
+                <p ng-show='confirmationError' class="help-block" ><i class="ion-alert-circled text-danger"></i>{{passwordMatch}}</p>
+                
+                <div class="form-group">
+                    <div ng-model='capcha' vc-recaptcha key="model.key"></div>
+                </div><!-- /.form-group -->
+
+                <p ng-show='capchaValid' class="help-block" ><i class="ion-alert-circled text-danger"></i> Captcha required</p>
+                <label style='font-size:12px;'>By clicking SIGN UP, you agree to our <a ng-click="dismissModal()" href='/#/terms-conditions'>Terms and Conditions</a> and <a href="/#/privacy-policy" ng-click="dismissModal()">Privacy Policy</a></label>
+                <div class="clearfix"></div>
+                <button type="submit" class="btn navbar-btn btn-primary" ng-click="tvfRegistration()">
+                    Sign Up
+                    <i class="ion-arrow-right-c"></i>
+                </button>
+                 </form> 
+            <span ng-show='show_reg_loader' style= 'position: relative;margin: 5px;' class="loading-icon text-center"></span>
+            <hr>
+        </div>
+
+            <!-- </div> -->
+    </div><!-- /.modal-body -->
+</div>
+<div ng-include="'static/client/components/footer/footer.html'"></div>
+

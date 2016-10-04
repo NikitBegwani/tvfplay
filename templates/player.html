@@ -1,0 +1,29 @@
+<div class="hero-video-embed">
+	<div class="img-responsive">
+		<div ng-show='episode.video_tag!=undefined && episode.third_party==0' style="display: block; position: relative; max-width: 100%;">
+			<div style="display: block; padding-top: 56.25%;" >
+				<!-- <video id='brightcovePlayer' data-embed="default" class="video-js" controls style="width: 100%; height: 100%; position: absolute; top: 0px; bottom: 0px; right: 0px; left: 0px;"></video> -->
+				<!-- <div id='brightcove-video-player'></div> -->
+				<div bind-html-compile="playerHtmlBrightcove" id='brightcove-video-player'></div>
+			</div>
+		</div>
+		<!-- <script ng-src="//players.brightcove.net/4512983226001/4kjc44rjg_default/index.min.js"></script> -->
+		<!-- <script ng-src="{{formjs(account_id, player_id)}}"></script> -->
+	</div>
+	<!-- /.img-responsive -->
+	<div ng-if='episode.video_tag!=undefined && episode.third_party==1' class="embed-responsive embed-responsive-16by9">
+		<!-- <div bind-html-compile="video_tag" class="embed-responsive-item"></div> -->
+		<div id='player' class="embed-responsive-item"></div>
+	</div>
+	<!-- /.img-responsive -->
+	<div ng-if='episode.video_tag==undefined' class="hero-video-teaser">
+		<button 
+			class="btn btn-default btn-play"
+			ng-click='login("play")'>
+		<i class="nc-icon-glyph media-1_button-play x3"></i>
+		</button>
+		<img class="img-responsive" style='width:100%;' ng-src="{{encodeImage(episode.aspect_xl_large_url)}}" alt="">
+	</div>
+	<!-- /.img-responsive -->
+</div>
+<!-- /.embed -->
